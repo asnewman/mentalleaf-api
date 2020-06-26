@@ -1,5 +1,3 @@
-const bcrypt = require('bcrypt');
-
 const { getClient } = require('../database');
 
 /**
@@ -21,7 +19,7 @@ const addUserToDatabase = async (email, hashedPassword, salt) => {
     __typename: 'User',
     ...res.ops[0]
   };
-}
+};
 
 /**
  * Gets the user object in MongoDB
@@ -34,9 +32,9 @@ const getUserFromDatabase = async (email) => {
   const collection = client.db().collection('users');
   const res = await collection.findOne({ email });
   return res;
-}
+};
 
 module.exports = {
   addUserToDatabase,
   getUserFromDatabase
-}
+};

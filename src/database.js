@@ -11,7 +11,7 @@ const getClient = async () => {
   if (connectedClient === null) {
     connectedClient = await client.connect();
   }
-  
+
   return connectedClient;
 };
 
