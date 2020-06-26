@@ -4,8 +4,8 @@ const expressGraphQL = require('express-graphql');
 const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
 
-const { addUserToDb } = require('./database');
 const { removeSensitiveInfo } = require('./utilities');
+const { addUser } = require('./user/userService');
 
 const app = express();
 
@@ -41,7 +41,7 @@ const root = {
   },
   addUser: ({ input }) => {
     const { email, password } = input;
-    return addUserToDb(email, password);
+    return addUser(email, password);
   }
 };
 
