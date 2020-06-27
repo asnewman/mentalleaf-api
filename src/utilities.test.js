@@ -1,4 +1,4 @@
-const { removeSensitiveInfo } = require('../src/utilities');
+const { removeSensitiveInfo } = require('./utilities');
 
 describe('utilities', () => {
   test('removeSensitiveInfo', () => {

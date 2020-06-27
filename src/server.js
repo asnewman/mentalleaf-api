@@ -27,12 +27,16 @@ const schema = buildSchema(`
     reason: String
   }
 
+  type InvalidInput {
+    reason: String
+  }
+
   input UserInput {
     email: String!
     password: String!
   }
 
-  union AddUserResult = User | AddForbidden
+  union AddUserResult = User | AddForbidden | InvalidInput
 `);
 
 const root = {
