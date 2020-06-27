@@ -1,5 +1,6 @@
 # mentalleaf-api
 ![Node.js CI](https://github.com/asnewman/mentalleaf-api/workflows/Node.js%20CI/badge.svg)
+
 API for the open source MentalLeaf web app.
 ## Running locally
 1. `yarn`
