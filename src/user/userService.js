@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const { getUserFromDatabase, addUserToDatabase } = require('./userDAL');
+const { validateEmail, validatePassword } = require('./userHelper');
 
 /**
  * Adds a new user to the system
@@ -11,6 +12,20 @@ const addUser = async (email, password) => {
     return {
       __typename: 'AddForbidden',
       reason: 'Email is already in the system'
+    };
+  }
+
+  if (!validateEmail(email)) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'Email is not valid'
+    };
+  }
+
+  if (!validatePassword(password)) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'Password is not of the following: Minimum eight characters, at least one letter, one number and one special character'
     };
   }
 
