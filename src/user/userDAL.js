@@ -15,10 +15,7 @@ const addUserToDatabase = async (email, hashedPassword, salt) => {
 
   const res = await collection.insertOne({ email, hashedPassword, addedDate, salt });
 
-  return {
-    __typename: 'User',
-    ...res.ops[0]
-  };
+  return res.ops[0];
 };
 
 /**
@@ -34,7 +31,37 @@ const getUserFromDatabase = async (email) => {
   return res;
 };
 
+/**
+ * Add a new refresh token to the database
+ * @param {String} refreshToken New refresh token to save to the database
+ * @returns {*} Added object
+ */
+const addRefreshTokenToDatabase = async (refreshToken) => {
+  const client = await getClient();
+
+  const collection = client.db().collection('refreshTokens');
+  const res = await collection.insertOne({ refreshToken });
+
+  return res;
+};
+
+/**
+ * Gets a refresh token from the database
+ * @param {String} refreshToken Refresh token to look for
+ * @returns {*} Refresh token object
+ */
+const getRefreshTokenFromDatabase = async (refreshToken) => {
+  const client = await getClient();
+
+  const collect = client.db().collection('refreshTokens');
+  const res = await collect.findOne({ refreshToken });
+
+  return res;
+};
+
 module.exports = {
   addUserToDatabase,
-  getUserFromDatabase
+  getUserFromDatabase,
+  addRefreshTokenToDatabase,
+  getRefreshTokenFromDatabase
 };
