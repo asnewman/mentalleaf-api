@@ -5,7 +5,7 @@ const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
 
 const { removeSensitiveInfo } = require('./utilities');
-const { addUser } = require('./user/userService');
+const { addUser, loginUser, refreshUser } = require('./user/userService');
 
 const app = express();
 
@@ -15,7 +15,9 @@ const schema = buildSchema(`
   }
 
   type Mutation {
-    addUser(input: UserInput): AddUserResult 
+    addUser(input: UserInput): AddUserResult
+    loginUser(input: UserInput): LoginUserResult
+    refreshUser(input: RefreshTokenInput): RefreshUserResult
   }
 
   type User {
@@ -36,16 +38,44 @@ const schema = buildSchema(`
     password: String!
   }
 
+  type Tokens {
+    accessToken: String!
+    refreshToken: String!
+  }
+
+  input RefreshTokenInput {
+    refreshToken: String!
+  }
+
+  type AccessToken {
+    accessToken: String!
+  }
+
   union AddUserResult = User | AddForbidden | InvalidInput
+
+  union LoginUserResult = Tokens | InvalidInput
+
+  union RefreshUserResult = AccessToken | InvalidInput
 `);
 
 const root = {
   hello: () => {
     return 'Hello World';
   },
+  // Add a new user to the system
   addUser: ({ input }) => {
     const { email, password } = input;
     return addUser(email, password);
+  },
+  // Login a user
+  loginUser: ({ input }) => {
+    const { email, password } = input;
+    return loginUser(email, password);
+  },
+  // Use the refresh token to get a new access token
+  refreshUser: ({ input }) => {
+    const { refreshToken } = input;
+    return refreshUser(refreshToken);
   }
 };
 
