@@ -13,7 +13,7 @@ const addUserToDatabase = async (email, hashedPassword, salt) => {
 
   const addedDate = new Date();
 
-  const res = await collection.insertOne({ email, hashedPassword, addedDate, salt });
+  const res = await collection.insertOne({ email, hashedPassword, addedDate, salt, passwordReset: { resetCode: null, expires: null } });
 
   return res.ops[0];
 };
@@ -73,10 +73,33 @@ const deleteRefreshTokenFromDatabase = async (refreshToken) => {
   return res;
 };
 
+/**
+ * Adds a temporary reset code to the User
+ * @param {String} email User's email
+ * @param {String} resetCode Temporary code for reseting the password
+ * @param {int} timeToExpire Time from now to expire the code
+ * @returns {*} Mongodb object http://mongodb.github.io/node-mongodb-native/3.5/api/Collection.html#~updateWriteOpResult
+ */
+const addPasswordResetCodeToDatabase = async (email, resetCode, timeToExpire) => {
+  const client = await getClient();
+
+  const collect = client.db().collection('users');
+  const res = await collect.updateOne({ email }, {
+    $set: {
+      passwordReset: {
+        resetCode, expires: new Date() + timeToExpire
+      }
+    }
+  });
+
+  return res;
+};
+
 module.exports = {
   addUserToDatabase,
   getUserFromDatabase,
   addRefreshTokenToDatabase,
   getRefreshTokenFromDatabase,
-  deleteRefreshTokenFromDatabase
+  deleteRefreshTokenFromDatabase,
+  addPasswordResetCodeToDatabase
 };

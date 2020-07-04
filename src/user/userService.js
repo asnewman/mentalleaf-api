@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase } = require('./userDAL');
+const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase, addPasswordResetCodeToDatabase } = require('./userDAL');
 const { validateEmail, validatePassword } = require('./userHelper');
 
 /**
@@ -34,9 +35,11 @@ const addUser = async (email, password) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
+  const newUser = await addUserToDatabase(email, hashedPassword, salt);
+
   return {
     __typename: 'User',
-    user: addUserToDatabase(email, hashedPassword, salt)
+    ...newUser
   };
 };
 
@@ -125,9 +128,27 @@ const logoutUser = async (refreshToken) => {
   };
 };
 
+/**
+ * Adds a reset code to the user's account
+ * @param {String} email User account to add reset code to
+ */
+const addResetCode = async (email) => {
+  const code = crypto.randomBytes(4).toString('hex');
+
+  // 15 minute temporary code
+  const addRes = await addPasswordResetCodeToDatabase(email, code, 900000);
+
+  if (addRes.modifiedCount === 0) {
+    return { success: false };
+  }
+
+  return { success: true };
+};
+
 module.exports = {
   addUser,
   loginUser,
   refreshUser,
-  logoutUser
+  logoutUser,
+  addResetCode
 };
