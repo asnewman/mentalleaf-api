@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase } = require('./userDAL');
+const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase } = require('./userDAL');
 const { validateEmail, validatePassword } = require('./userHelper');
 
 /**
@@ -107,8 +107,27 @@ const refreshUser = async (refreshToken) => {
   }
 };
 
+/**
+ * Logs out a user by delete the existing refresh token
+ * @param {String} refreshToken Refresh token to delete
+ */
+const logoutUser = async (refreshToken) => {
+  const deleteRes = await deleteRefreshTokenFromDatabase(refreshToken);
+
+  if (deleteRes.deletedCount === 0) {
+    return {
+      success: false
+    };
+  }
+
+  return {
+    success: true
+  };
+};
+
 module.exports = {
   addUser,
   loginUser,
-  refreshUser
+  refreshUser,
+  logoutUser
 };

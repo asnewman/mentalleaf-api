@@ -59,9 +59,24 @@ const getRefreshTokenFromDatabase = async (refreshToken) => {
   return res;
 };
 
+/**
+ * Removes a refresh token from the database
+ * @param {String} refreshToken Refresh token to remove
+ * @returns {*} Response from mongodb http://mongodb.github.io/node-mongodb-native/3.5/api/Collection.html#~deleteWriteOpResult
+ */
+const deleteRefreshTokenFromDatabase = async (refreshToken) => {
+  const client = await getClient();
+
+  const collect = client.db().collection('refreshTokens');
+  const res = await collect.deleteOne({ refreshToken });
+
+  return res;
+};
+
 module.exports = {
   addUserToDatabase,
   getUserFromDatabase,
   addRefreshTokenToDatabase,
-  getRefreshTokenFromDatabase
+  getRefreshTokenFromDatabase,
+  deleteRefreshTokenFromDatabase
 };
