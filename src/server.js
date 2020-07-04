@@ -5,7 +5,7 @@ const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
 
 const { removeSensitiveInfo } = require('./utilities');
-const { addUser, loginUser, refreshUser } = require('./user/userService');
+const { addUser, loginUser, refreshUser, logoutUser } = require('./user/userService');
 
 const app = express();
 
@@ -18,7 +18,18 @@ const schema = buildSchema(`
     addUser(input: UserInput): AddUserResult
     loginUser(input: UserInput): LoginUserResult
     refreshUser(input: RefreshTokenInput): RefreshUserResult
+    logoutUser(input: RefreshTokenInput): LogoutUserResult
   }
+
+  type LogoutUserResult {
+    success: Boolean!
+  }
+
+  union AddUserResult = User | AddForbidden | InvalidInput
+
+  union LoginUserResult = Tokens | InvalidInput
+
+  union RefreshUserResult = AccessToken | InvalidInput
 
   type User {
     email: String!
@@ -50,12 +61,6 @@ const schema = buildSchema(`
   type AccessToken {
     accessToken: String!
   }
-
-  union AddUserResult = User | AddForbidden | InvalidInput
-
-  union LoginUserResult = Tokens | InvalidInput
-
-  union RefreshUserResult = AccessToken | InvalidInput
 `);
 
 const root = {
@@ -76,6 +81,11 @@ const root = {
   refreshUser: ({ input }) => {
     const { refreshToken } = input;
     return refreshUser(refreshToken);
+  },
+  // Deletes the given refreshToken
+  logoutUser: ({ input }) => {
+    const { refreshToken } = input;
+    return logoutUser(refreshToken);
   }
 };
 
