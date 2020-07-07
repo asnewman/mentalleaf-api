@@ -2,8 +2,9 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase, addPasswordResetCodeToDatabase } = require('./userDAL');
+const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase, addPasswordResetCodeToDatabase, updateUserPassword } = require('./userDAL');
 const { validateEmail, validatePassword } = require('./userHelper');
+const { emailUser } = require('../utilities');
 
 /**
  * Adds a new user to the system
@@ -142,7 +143,68 @@ const addResetCode = async (email) => {
     return { success: false };
   }
 
+  if (!emailUser(email, 'Password Reset Code', `Here is your password reset code: ${code}`)) {
+    return { success: false };
+  }
+
   return { success: true };
+};
+
+/**
+ * Resets the user's password
+ * @param {String} email Email of the user to update
+ * @param {String} newPassword New password
+ * @param {String} resetCode Reset code for the updating the password
+ */
+const resetPassword = async (email, newPassword, resetCode) => {
+  // First check to see if the reset code is correct
+  const user = await getUserFromDatabase(email);
+
+  if (!validatePassword(newPassword)) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'Password is not of the following: Minimum eight characters, at least one letter, one number and one special character'
+    };
+  }
+
+  // Entered email does not exist in the system
+  if (!user) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'User does not exist'
+    };
+  }
+
+  if (user.passwordReset.resetCode !== resetCode) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'Reset code is invalid'
+    };
+  }
+
+  if (new Date() > user.passwordReset.expiresIn) {
+    return {
+      __typename: 'InvalidInput',
+      reason: 'Reset code is expired'
+    };
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+  const updatedPasswordResult = await updateUserPassword(email, hashedPassword, salt);
+
+  if (updatedPasswordResult.modifiedCount === 0) {
+    return {
+      __typename: 'ResetPasswordSuccess',
+      success: false
+    };
+  }
+
+  return {
+    __typename: 'ResetPasswordSuccess',
+    success: true
+  };
 };
 
 module.exports = {
@@ -150,5 +212,6 @@ module.exports = {
   loginUser,
   refreshUser,
   logoutUser,
-  addResetCode
+  addResetCode,
+  resetPassword
 };

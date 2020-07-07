@@ -95,11 +95,38 @@ const addPasswordResetCodeToDatabase = async (email, resetCode, timeToExpire) =>
   return res;
 };
 
+/**
+ * Updates user's password in the database
+ * Expires the current code
+ * @param {String} email Email of the user to update
+ * @param {String} newHashedPassword New password that is already hashed
+ * @param {String} salt Salt that was used to hash the password
+ * @returns {*} Updated user object
+ */
+const updateUserPassword = async (email, newHashedPassword, salt) => {
+  const client = await getClient();
+
+  const collection = client.db().collection('users');
+  const res = await collection.updateOne({ email }, {
+    $set: {
+      hashedPassword: newHashedPassword,
+      salt: salt,
+      passwordReset: {
+        resetCode: null,
+        expires: new Date()
+      }
+    }
+  });
+
+  return res;
+};
+
 module.exports = {
   addUserToDatabase,
   getUserFromDatabase,
   addRefreshTokenToDatabase,
   getRefreshTokenFromDatabase,
   deleteRefreshTokenFromDatabase,
-  addPasswordResetCodeToDatabase
+  addPasswordResetCodeToDatabase,
+  updateUserPassword
 };

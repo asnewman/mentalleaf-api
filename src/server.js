@@ -5,7 +5,7 @@ const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
 
 const { removeSensitiveInfo } = require('./utilities');
-const { addUser, loginUser, refreshUser, logoutUser, addResetCode } = require('./user/userService');
+const { addUser, loginUser, refreshUser, logoutUser, addResetCode, resetPassword } = require('./user/userService');
 
 const app = express();
 
@@ -20,6 +20,7 @@ const schema = buildSchema(`
     refreshUser(input: RefreshTokenInput): RefreshUserResult
     logoutUser(input: RefreshTokenInput): LogoutUserResult
     addResetCode(input: ResetCodeInput): AddResetCodeResult
+    resetPassword(input: ResetPasswordInput): ResetPasswordResult
   }
 
   type LogoutUserResult {
@@ -35,6 +36,8 @@ const schema = buildSchema(`
   union LoginUserResult = Tokens | InvalidInput
 
   union RefreshUserResult = AccessToken | InvalidInput
+
+  union ResetPasswordResult = ResetPasswordSuccess | InvalidInput
 
   type User {
     email: String!
@@ -70,6 +73,16 @@ const schema = buildSchema(`
   type AccessToken {
     accessToken: String!
   }
+
+  input ResetPasswordInput {
+    email: String!
+    newPassword: String!
+    resetCode: String!
+  }
+
+  type ResetPasswordSuccess {
+    success: Boolean!
+  }
 `);
 
 const root = {
@@ -100,6 +113,11 @@ const root = {
   addResetCode: ({ input }) => {
     const { email } = input;
     return addResetCode(email);
+  },
+  // Reset password
+  resetPassword: ({ input }) => {
+    const { email, newPassword, resetCode } = input;
+    return resetPassword(email, newPassword, resetCode);
   }
 };
 
