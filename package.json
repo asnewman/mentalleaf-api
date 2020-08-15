@@ -7,7 +7,8 @@
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "lint": "semistandard",
-    "test": "jest"
+    "test": "jest",
+    "test-integration": "newman run src/postman/MentalLeafAPI.postman_collection.json"
   },
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "homepage": "https://github.com/asnewman/filosopher-api#readme",
   "devDependencies": {
     "husky": "^4.2.5",
+    "newman": "^5.1.0",
     "nodemon": "^2.0.4",
     "semistandard": "^14.2.0"
   },
