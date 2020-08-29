@@ -9,7 +9,11 @@ let connectedClient = null;
  */
 const getClient = async () => {
   if (connectedClient === null) {
-    connectedClient = await client.connect();
+    try {
+      connectedClient = await client.connect();
+    } catch (e) {
+      console.error('Failed to connect to DB', e);
+    }
   }
 
   return connectedClient;
