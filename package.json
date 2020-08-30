@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "start-background": "nohup node src/server.js &",
+    "start-background": "nohup node src/server.js > server.out 2>&1",
     "lint": "semistandard",
     "test": "jest",
     "test-integration": "newman run src/postman/MentalLeafAPI.postman_collection.json"
