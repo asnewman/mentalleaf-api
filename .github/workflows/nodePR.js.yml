@@ -33,13 +33,11 @@ jobs:
     - run: yarn
     - run: yarn test
     - run: yarn start-background
-    - run: ls
-
     - run: yarn test-integration
-
 
     - name: Archive integration test logs
       uses: actions/upload-artifact@v2
+      if: ${{ always() }}
       with:
         name: integration-test-logs
         path: server.out
