@@ -1,5 +1,3 @@
-const { connect } = require('mongodb');
-
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -10,6 +8,7 @@ let connectedClient = null;
  * @returns {*} A MongoDB connected client
  */
 const getClient = async () => {
+  console.log('client', client);
   if (connectedClient === null) {
     try {
       connectedClient = await client.connect();
