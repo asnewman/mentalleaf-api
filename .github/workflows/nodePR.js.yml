@@ -32,7 +32,12 @@ jobs:
 
     - run: yarn
     - run: yarn test
-    - run: yarn start-background
+    - name: Start background server
+      run: yarn start-background
+      env:
+        ACCESS_TOKEN_SECRET: b35e8398c0b18a225f162e5ea0b768813014dbaea6e57c51dc281d9f2714ab648b00e770f35d19db6b8fab21fb9d315d7a8b4648d95cc4fd3198f02051498bb2
+        REFRESH_TOKEN_SECRET: 52a40ccbd23f5c40266e3ac40f1f67c3aaaf7abb1e020c1eb2893ab1b33046074f29df5786dddb6ec1be9e8a6cfed54a596edd3aa1caed49cdf47c4760485b7d
+        MONGO_URI: mongodb://127.0.0.1:27017
     - run: yarn test-integration
 
     - name: Archive integration test logs
