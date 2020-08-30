@@ -40,4 +40,4 @@ jobs:
       if: ${{ always() }}
       with:
         name: integration-test-logs
-        path: server.out
+        path: nohup.out
