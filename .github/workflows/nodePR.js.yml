@@ -33,9 +33,10 @@ jobs:
     - run: yarn
     - run: yarn test
     - run: yarn start-background
+    - run: ls
+
     - run: yarn test-integration
 
-    - run: ls
 
     - name: Archive integration test logs
       uses: actions/upload-artifact@v2
