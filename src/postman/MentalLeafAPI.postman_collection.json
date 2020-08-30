@@ -488,5 +488,28 @@
 			"response": []
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "66f32ba7-44b5-483b-b3f9-341b062d3921",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0c367b1d-7638-41fa-b5f3-47e050d3048a",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+					"tests[\"[INFO] Response: \" + responseBody] = true;"
+				]
+			}
+		}
+	],
 	"protocolProfileBehavior": {}
 }
