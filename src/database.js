@@ -8,7 +8,6 @@ let connectedClient = null;
  * @returns {*} A MongoDB connected client
  */
 const getClient = async () => {
-  console.log('client', client);
   if (connectedClient === null) {
     try {
       connectedClient = await client.connect();
@@ -16,8 +15,6 @@ const getClient = async () => {
       console.error('Failed to connect to DB', e);
     }
   }
-
-  console.log('Returning client', connectedClient);
 
   return connectedClient;
 };
