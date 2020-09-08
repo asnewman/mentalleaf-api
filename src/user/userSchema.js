@@ -105,7 +105,7 @@ const userResolvers = {
   }
 };
 
-export {
+module.exports = {
   userSchema,
   userResolvers
 };
