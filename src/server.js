@@ -9,15 +9,19 @@ const { userSchema, userResolvers } = require('./user/userSchema');
 
 const app = express();
 
-const schema = buildSchema(`
+const schemaString = (`
   type Query {
     hello: String
   }
 
-  type Mutation {}
+  type Mutation {
+    hello: String
+  }
 
   ${userSchema}
 `);
+
+const schema = buildSchema(schemaString);
 
 const root = {
   hello: () => {

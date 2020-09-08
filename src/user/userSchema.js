@@ -1,4 +1,4 @@
-const { addUser, loginUser, refreshUser, logoutUser, addResetCode, resetPassword } = require('./user/userService');
+const { addUser, loginUser, refreshUser, logoutUser, addResetCode, resetPassword } = require('./userService');
 
 const userSchema = `
   extend type Mutation {
