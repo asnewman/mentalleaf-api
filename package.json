@@ -9,7 +9,7 @@
     "start-background": "nohup node src/server.js > server.out&",
     "lint": "semistandard",
     "test": "jest",
-    "test-integration": "newman run src/postman/MentalLeafAPI.postman_collection.json"
+    "test-integration": "newman run integration/MentalLeafAPI.postman_collection.json"
   },
   "repository": {
     "type": "git",
