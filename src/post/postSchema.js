@@ -1,5 +1,3 @@
-const Post = require('./Post');
-
 const postSchema = `
   extend type Mutation {
     addPost(content: String): Post
