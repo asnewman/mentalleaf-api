@@ -6,6 +6,39 @@
 	},
 	"item": [
 		{
+			"name": "Nuke",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69f857e0-9fe6-4d14-aefb-c831f2c100c1",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/nuke",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"nuke"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Create user bad password 1",
 			"event": [
 				{

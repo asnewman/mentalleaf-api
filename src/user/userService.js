@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
-const { getUserFromDatabase, addUserToDatabase, addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase, addPasswordResetCodeToDatabase, updateUserPassword } = require('./userDAL');
+const { User } = require('./User');
+const { addRefreshTokenToDatabase, getRefreshTokenFromDatabase, deleteRefreshTokenFromDatabase } = require('./userDAL');
 const { validateEmail, validatePassword } = require('./userHelper');
 const { emailUser } = require('../utilities');
 
@@ -12,7 +13,9 @@ const { emailUser } = require('../utilities');
  * @param {String} password User's password
  */
 const addUser = async (email, password) => {
-  if (await getUserFromDatabase(email)) {
+  const existingUser = await User.findOne({ email }).exec();
+
+  if (existingUser) {
     return {
       __typename: 'AddForbidden',
       reason: 'Email is already in the system'
@@ -36,11 +39,20 @@ const addUser = async (email, password) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await addUserToDatabase(email, hashedPassword, salt);
+  const newUser = new User({
+    email,
+    hashedPassword,
+    salt,
+    addedDate: new Date(),
+    resetCode: null,
+    resetCodeExpiration: null
+  });
+
+  await newUser.save();
 
   return {
     __typename: 'User',
-    ...newUser
+    ...newUser._doc
   };
 };
 
@@ -50,7 +62,7 @@ const addUser = async (email, password) => {
  * @param {String} password User's password
  */
 const loginUser = async (email, password) => {
-  const dbUser = await getUserFromDatabase(email);
+  const dbUser = await User.findOne({ email }).exec();
 
   // User does not exist
   if (!dbUser) {
@@ -136,12 +148,20 @@ const logoutUser = async (refreshToken) => {
 const addResetCode = async (email) => {
   const code = crypto.randomBytes(4).toString('hex');
 
-  // 15 minute temporary code
-  const addRes = await addPasswordResetCodeToDatabase(email, code, 900000);
+  const updateUser = await User.findOne({ email });
 
-  if (addRes.modifiedCount === 0) {
+  if (!updateUser) {
     return { success: false };
   }
+
+  // 15 minute temporary code
+  updateUser.resetCode = code;
+
+  const expiration = new Date();
+  expiration.setMinutes(expiration.getMinutes() + 15);
+
+  updateUser.resetCodeExpiration = expiration;
+  await updateUser.save();
 
   if (!emailUser(email, 'Password Reset Code', `Here is your password reset code: ${code}`)) {
     return { success: false };
@@ -158,7 +178,7 @@ const addResetCode = async (email) => {
  */
 const resetPassword = async (email, newPassword, resetCode) => {
   // First check to see if the reset code is correct
-  const user = await getUserFromDatabase(email);
+  const user = await User.findOne({ email }).exec();
 
   if (!validatePassword(newPassword)) {
     return {
@@ -175,14 +195,14 @@ const resetPassword = async (email, newPassword, resetCode) => {
     };
   }
 
-  if (user.passwordReset.resetCode !== resetCode) {
+  if (user.resetCode !== resetCode) {
     return {
       __typename: 'InvalidInput',
       reason: 'Reset code is invalid'
     };
   }
 
-  if (new Date() > user.passwordReset.expiresIn) {
+  if (new Date() > user.resetCodeExpiration) {
     return {
       __typename: 'InvalidInput',
       reason: 'Reset code is expired'
@@ -192,19 +212,23 @@ const resetPassword = async (email, newPassword, resetCode) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-  const updatedPasswordResult = await updateUserPassword(email, hashedPassword, salt);
+  user.hashedPassword = hashedPassword;
+  user.salt = salt;
+  user.resetCode = null;
+  user.resetCodeExpiration = new Date();
 
-  if (updatedPasswordResult.modifiedCount === 0) {
+  try {
+    await user.save();
     return {
       __typename: 'ResetPasswordSuccess',
-      success: false
+      success: true
+    };
+  } catch {
+    return {
+      __typename: 'ResetPasswordSuccess',
+      success: true
     };
   }
-
-  return {
-    __typename: 'ResetPasswordSuccess',
-    success: true
-  };
 };
 
 module.exports = {
