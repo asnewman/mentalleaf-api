@@ -1,10 +1,12 @@
 const applyMiddleware = (middlewares, resolver) =>
   async (root, args, context, info) => {
     for (const mw of middlewares) {
-      await mw();
+      await mw(context);
     }
 
-    await resolver(root, args, context, info);
+    const result = await resolver(root, args, context, info);
+
+    return result;
   };
 
 const applyMiddlewareToResolverMap = (middlewares, resolverMap) => {
