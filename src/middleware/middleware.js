@@ -1,14 +1,28 @@
+/**
+ * Applies middleware to individual resolver functions
+ * @param {Array<func>} middlewares Middleware functions that return a value if interception is needed
+ * @param {*} resolver Graphql resolvers
+ */
 const applyMiddleware = (middlewares, resolver) =>
-  async (root, args, context, info) => {
+  async (args, context, info) => {
     for (const mw of middlewares) {
-      await mw(context);
+      const middlewareResult = await mw(context);
+
+      if (middlewareResult) {
+        return middlewareResult;
+      }
     }
 
-    const result = await resolver(root, args, context, info);
+    const result = await resolver(args, context, info);
 
     return result;
   };
 
+/**
+   * Applies middleware to all resolvers in a map
+   * @param {Array<func>} middlewares Middleware functions that return a value if interception is needed
+   * @param {*} resolverMap Graphqlresolvers
+   */
 const applyMiddlewareToResolverMap = (middlewares, resolverMap) => {
   const middlewaredMap = {};
 

@@ -3,6 +3,7 @@ const express = require('express');
 const expressGraphQL = require('express-graphql');
 const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 const { getClient } = require('./database');
 const { removeSensitiveInfo } = require('./utilities');
@@ -55,6 +56,8 @@ app.use(morgan(function (tokens, req, res) {
 // express.json() allows the logging middleware to log the query
 app.use(express.json());
 
+app.use(cookieParser());
+
 app.use('/graphql', expressGraphQL({
   schema: schema,
   rootValue: root,
@@ -65,7 +68,7 @@ app.use('/graphql', expressGraphQL({
 // Endpoint to destory database
 if (process.env.RUN_ENVIRONMENT === 'dev') {
   app.use('/nuke', async function (req, res) {
-    const collections = ['users', 'refreshTokens'];
+    const collections = ['users', 'refreshTokens', 'posts'];
     const client = await getClient();
 
     for (const collection of collections) {
