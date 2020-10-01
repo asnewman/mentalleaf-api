@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer');
 
-const { getUserByAccessToken } = require('./user/userService');
-
 /**
  * Takes in a graphql input and redacts specified fields like passwords
  * @param {String} str Log to remove sensitive information from
@@ -48,41 +46,4 @@ const emailUser = async (email, subject, message) => {
   }
 };
 
-/**
- * Auth check to see if user has a valid access token
- * If valid, attaches User object to the req object
- * @param {Array<String>} exemptOpertaions Operations that do not need auth
- */
-const checkAuth = (exemptOperations) => {
-  /**
-   * @param {*} req Express request
-   * @param {*} res Express response
-   */
-  return async (root, args, context, info, next) => {
-    const result = await next();
-    // you can modify result
-    return result; // you must return value
-    const accessToken = req.cookies.accessToken;
-
-    if (exemptOperations.includes(req.body.url)) {
-      next();
-    }
-
-    if (!accessToken) {
-      console.error('Forbidden request, no accessToken', req);
-      res.sendStatus(401);
-    }
-
-    const user = await getUserByAccessToken(accessToken);
-
-    if (!user) {
-      console.error('Forbidden request, invalid accessToken', req);
-      res.sendStatus(401);
-    }
-
-    req.user = user;
-    next();
-  };
-};
-
-module.exports = { removeSensitiveInfo, emailUser, checkAuth };
+module.exports = { removeSensitiveInfo, emailUser };
