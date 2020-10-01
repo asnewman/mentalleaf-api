@@ -931,7 +931,7 @@
 				"body": {
 					"mode": "graphql",
 					"graphql": {
-						"query": "mutation deletePost($postID: String!) {\r\n  deletePost(_id: $postID) {\r\n      isDeleted\r\n  }\r\n}",
+						"query": "mutation deletePost($postID: String!) {\r\n  deletePost(_id: $postID) {\r\n      isDeleted\r\n      reason\r\n  }\r\n}",
 						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
 					}
 				},
