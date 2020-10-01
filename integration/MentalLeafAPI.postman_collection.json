@@ -1,0 +1,1109 @@
+{
+	"info": {
+		"_postman_id": "5f8f8549-8935-40f4-9cc8-6c32d9b7c83a",
+		"name": "MentalLeaf API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Nuke",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "69f857e0-9fe6-4d14-aefb-c831f2c100c1",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.status(200)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/nuke",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"nuke"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user bad password 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "712b0d20-869e-4ab1-98ab-d3ab1a5aaccc",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\"data\":{\"addUser\":{\"reason\":\"Password is not of the following: Minimum eight characters, at least one letter, one number and one special character\"}}})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email@example.com\", password: \"password\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user bad password 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "edfdb74e-e988-48d7-a773-f6d1d2b550a7",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\"data\":{\"addUser\":{\"reason\":\"Password is not of the following: Minimum eight characters, at least one letter, one number and one special character\"}}})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email@example.com\", password: \"Password1\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user bad password 3",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e55fbbb-69e7-43d7-a9d0-214ca588f031",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\"data\":{\"addUser\":{\"reason\":\"Password is not of the following: Minimum eight characters, at least one letter, one number and one special character\"}}})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email@example.com\", password: \"Pword1!\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f92d8352-16eb-4759-81d7-11d7a77f7135",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"    \"data\": {\r",
+							"        \"addUser\": {\r",
+							"            \"email\": \"email@example.com\"\r",
+							"        }\r",
+							"    }\r",
+							"})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email@example.com\", password: \"Password123!\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user duplicate user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "df3af5a1-d231-411c-b4a3-082da813ce9c",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"    \"data\": {\r",
+							"        \"addUser\": {\r",
+							"            \"reason\": \"Email is already in the system\"\r",
+							"        }\r",
+							"    }\r",
+							"})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email@example.com\", password: \"Password123!\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add post no accessToken cookie",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bb112864-9e94-473e-ba4d-f2a60fedd9a8",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.have.body({\r",
+							"        data: {\r",
+							"            addPost: {\r",
+							"                reason: \"User did not authenticate correctly\"\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ca901957-d85b-47c4-9b81-24a7b9e0d3ec",
+						"exec": [
+							"pm.cookies.jar().unset(\"http://localhost\", \"accessToken\", function (err, val) {\r",
+							"    if (err) {\r",
+							"        console.error(err)\r",
+							"    }\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation addPost {\r\n  addPost(content: \"hello\") {\r\n    ...on Post {\r\n        content\r\n        author\r\n        date\r\n      }\r\n    ...on InvalidUser {\r\n        reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add post bad accessToken cookie",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ce5830f1-0cbb-4a2c-a998-ed878e269ee6",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.have.body({\r",
+							"        data: {\r",
+							"            addPost: {\r",
+							"                reason: \"User did not authenticate correctly\"\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "38bd7824-d395-4e14-8391-10ea52d17c1b",
+						"exec": [
+							"pm.cookies.jar().set(\"http://localhost\", \"accessToken\", \"123\", function (err, val) {\r",
+							"    if (err) {\r",
+							"        console.error(err)\r",
+							"    }\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation addPost {\r\n  addPost(content: \"hello\") {\r\n    ...on Post {\r\n        content\r\n        author\r\n        date\r\n      }\r\n    ...on InvalidUser {\r\n        reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user wrong password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b914fa55-9cc6-490d-a075-1dacb29a6524",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"    \"data\": {\r",
+							"        \"loginUser\": {\r",
+							"            \"reason\": \"Username or password is incorrect\"\r",
+							"        }\r",
+							"    }\r",
+							"})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  loginUser(input: {email: \"email@example.com\", password: \"Passwod123!\"}){\r\n      ... on Tokens {\r\n      accessToken\r\n      refreshToken\r\n    }\r\n    ... on InvalidInput {\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9ecec68c-8016-4630-88f9-fcec55d43053",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.globals.get(\"variable_key\");\r",
+							"    pm.variables.get(\"variable_key\");\r",
+							"    pm.expect(pm.response.json().data.loginUser).to.have.property('accessToken')\r",
+							"\r",
+							"    pm.environment.set(\"accessToken\", pm.response.json().data.loginUser.accessToken);\r",
+							"    pm.environment.set(\"refreshToken\", pm.response.json().data.loginUser.refreshToken);\r",
+							"\r",
+							"    pm.cookies.jar().set(pm.request.url, \"accessToken\", pm.response.json().data.loginUser.accessToken, function (err, val) {\r",
+							"        if (err) {\r",
+							"            console.error(err)\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  loginUser(input: {email: \"email@example.com\", password: \"Password123!\"}){\r\n      ... on Tokens {\r\n      accessToken\r\n      refreshToken\r\n    }\r\n    ... on InvalidInput {\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d8a7438c-9574-4c10-9df6-d197334bf8a7",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.addPost.content).to.equal('hello')\r",
+							"    pm.environment.set(\"post1Id\", pm.response.json().data.addPost._id);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation addPost {\r\n  addPost(content: \"hello\") {\r\n      ...on Post {\r\n          _id\r\n          content\r\n          author\r\n          date\r\n      }\r\n      ...on InvalidUser {\r\n          reason\r\n      }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "26cbc6a3-7318-42bf-9ffc-c8a87e071784",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.editPost.content).to.equal('goodbye')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation editPost($postID: String!) {\r\n  editPost(_id: $postID, content: \"goodbye\") {\r\n    ...on Post {\r\n        _id\r\n        content\r\n        author\r\n        date\r\n    }\r\n    ...on InvalidUser {\r\n        reason\r\n    }\r\n    ...on InvalidPost {\r\n        reason\r\n    }\r\n  }\r\n}",
+						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refersh user bad token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3dcd5d17-f56a-4b46-94e5-2ff89eafac62",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"        \"data\": {\r",
+							"            \"refreshUser\": {\r",
+							"                \"reason\": \"Refresh token does not exist\"\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  refreshUser(input: { refreshToken: \"123\"}) {\r\n      ...on AccessToken {\r\n          accessToken\r\n      }\r\n      ...on InvalidInput {\r\n          reason\r\n      }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refersh user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "53249cca-fcba-46e5-99ae-ffe91bdbd3fc",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.refreshUser).to.have.property('accessToken')\r",
+							"\r",
+							"    pm.environment.set(\"accessToken\", pm.response.json().data.refreshUser.accessToken);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  refreshUser(input: { refreshToken: \"{{refreshToken}}\"}) {\r\n      ...on AccessToken {\r\n          accessToken\r\n      }\r\n      ...on InvalidInput {\r\n          reason\r\n      }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout user bad refresh token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a7ced7f1-bdf4-4993-8cab-2d013c569f2f",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"        pm.response.to.have.body({\r",
+							"        \"data\": {\r",
+							"            \"logoutUser\": {\r",
+							"                \"success\": false\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  logoutUser(input: { refreshToken: \"123\" }) {\r\n      success\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6a8de2b2-2037-40a6-9c59-27f909f7e673",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"        pm.response.to.have.body({\r",
+							"        \"data\": {\r",
+							"            \"logoutUser\": {\r",
+							"                \"success\": true\r",
+							"            }\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  logoutUser(input: { refreshToken: \"{{refreshToken}}\" }) {\r\n      success\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create user2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0288a647-6612-49c3-8333-df6623aecf49",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.response.to.have.body({\r",
+							"    \"data\": {\r",
+							"        \"addUser\": {\r",
+							"            \"email\": \"email2@example.com\"\r",
+							"        }\r",
+							"    }\r",
+							"})\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  addUser(input: {email: \"email2@example.com\", password: \"Password123!\"}){\r\n    ... on User {\r\n      email\r\n    }\r\n    ... on InvalidInput{\r\n      reason\r\n    }\r\n    ... on AddForbidden{\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2b112bca-9ce6-4854-ab5c-adb31e8f3791",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.globals.get(\"variable_key\");\r",
+							"    pm.variables.get(\"variable_key\");\r",
+							"    pm.expect(pm.response.json().data.loginUser).to.have.property('accessToken')\r",
+							"\r",
+							"    pm.environment.set(\"accessToken2\", pm.response.json().data.loginUser.accessToken);\r",
+							"    pm.environment.set(\"refreshToken2\", pm.response.json().data.loginUser.refreshToken);\r",
+							"\r",
+							"    pm.cookies.jar().set(pm.request.url, \"accessToken\", pm.response.json().data.loginUser.accessToken, function (err, val) {\r",
+							"        if (err) {\r",
+							"            console.error(err)\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  loginUser(input: {email: \"email2@example.com\", password: \"Password123!\"}){\r\n      ... on Tokens {\r\n      accessToken\r\n      refreshToken\r\n    }\r\n    ... on InvalidInput {\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit post not owned",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a6308bbe-f1b0-4ead-a07d-d415d559a44f",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.editPost.reason).to.equal('User does not own the edited post')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation editPost($postID: String!) {\r\n  editPost(_id: $postID, content: \"thisisnotmypost\") {\r\n    ...on Post {\r\n        _id\r\n        content\r\n        author\r\n        date\r\n    }\r\n    ...on InvalidUser {\r\n        reason\r\n    }\r\n    ...on InvalidPost {\r\n        reason\r\n    }\r\n  }\r\n}",
+						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit post that does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e6b0cb2-ddbb-4693-b5a1-bcb495ea5484",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.editPost.reason).to.equal('Edited post does not exist')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation editPost {\r\n  editPost(_id: \"5f75431c5eb9b9089e257230\", content: \"thisisnotmypost\") {\r\n    ...on Post {\r\n        _id\r\n        content\r\n        author\r\n        date\r\n    }\r\n    ...on InvalidUser {\r\n        reason\r\n    }\r\n    ...on InvalidPost {\r\n        reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete post not owned",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4a1c0da2-0d4c-437f-966f-df517cda0eb8",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.deletePost.isDeleted).to.equal(false)\r",
+							"    pm.expect(pm.response.json().data.deletePost.reason).to.equal('User does not own the post')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation deletePost($postID: String!) {\r\n  deletePost(_id: $postID) {\r\n      isDeleted\r\n      reason\r\n  }\r\n}",
+						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete post that does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "52517f3a-9d91-4ba5-be6e-1909bee060fe",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.deletePost.isDeleted).to.equal(false)\r",
+							"    pm.expect(pm.response.json().data.deletePost.reason).to.equal('Post does not exist')\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation deletePost {\r\n  deletePost(_id: \"5f75431c5eb9b9089e257230\") {\r\n    isDeleted\r\n    reason\r\n  }\r\n}",
+						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "89b8867e-b315-4e4b-880c-71e66dd03f12",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.globals.get(\"variable_key\");\r",
+							"    pm.variables.get(\"variable_key\");\r",
+							"    pm.expect(pm.response.json().data.loginUser).to.have.property('accessToken')\r",
+							"\r",
+							"    pm.environment.set(\"accessToken\", pm.response.json().data.loginUser.accessToken);\r",
+							"    pm.environment.set(\"refreshToken\", pm.response.json().data.loginUser.refreshToken);\r",
+							"\r",
+							"    pm.cookies.jar().set(pm.request.url, \"accessToken\", pm.response.json().data.loginUser.accessToken, function (err, val) {\r",
+							"        if (err) {\r",
+							"            console.error(err)\r",
+							"        }\r",
+							"    })\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation{\r\n  loginUser(input: {email: \"email@example.com\", password: \"Password123!\"}){\r\n      ... on Tokens {\r\n      accessToken\r\n      refreshToken\r\n    }\r\n    ... on InvalidInput {\r\n      reason\r\n    }\r\n  }\r\n}",
+						"variables": ""
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cbdb63ac-6db4-4fe5-adba-2eb706ada5cb",
+						"exec": [
+							"pm.test(\"Correct response check\", function () {\r",
+							"    pm.expect(pm.response.json().data.deletePost.isDeleted).to.equal(true)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation deletePost($postID: String!) {\r\n  deletePost(_id: $postID) {\r\n      isDeleted\r\n      reason\r\n  }\r\n}",
+						"variables": "{\r\n    \"postID\": \"{{post1Id}}\"\r\n}"
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/graphql",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "66f32ba7-44b5-483b-b3f9-341b062d3921",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0c367b1d-7638-41fa-b5f3-47e050d3048a",
+				"type": "text/javascript",
+				"exec": [
+					"tests[\"[INFO] Request: \" + JSON.stringify(request)] = true;",
+					"tests[\"[INFO] Response: \" + responseBody] = true;"
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

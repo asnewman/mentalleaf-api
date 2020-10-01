@@ -44,8 +44,6 @@ const emailUser = async (email, subject, message) => {
   } catch (e) {
     console.error(`Failed to send email ${e}`);
   }
-}
-;
+};
 
-module.exports = { removeSensitiveInfo, emailUser }
-;
+module.exports = { removeSensitiveInfo, emailUser };

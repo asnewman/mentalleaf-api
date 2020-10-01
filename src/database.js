@@ -19,6 +19,11 @@ const getClient = async () => {
   return connectedClient;
 };
 
+const mongoose = require('mongoose');
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
 module.exports = {
   getClient
 };

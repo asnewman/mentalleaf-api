@@ -9,6 +9,7 @@ API for the open source MentalLeaf web app.
     * `MONGO_URI=<your mongodb uri>`
     * `ACCESS_TOKEN_SECRET=<generate with require('crypto').randomBytes(64).toString('hex')>`
     * `REFRESH_TOKEN_SECRET=<generate with require('crypto').randomBytes(64).toString('hex')>`
+    * `RUN_ENVIRONMENT=dev`
 1. If you want emailing to users to work add the following fields to the `.env`
     * `EMAIL_HOST=<your email's host server address>`
     * `EMAIL_PORT=<your email's port>`
