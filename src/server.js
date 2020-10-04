@@ -4,6 +4,7 @@ const expressGraphQL = require('express-graphql');
 const { buildSchema, defaultTypeResolver } = require('graphql');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const { getClient } = require('./database');
 const { removeSensitiveInfo } = require('./utilities');
@@ -13,6 +14,7 @@ const { postSchema } = require('./post/postSchema');
 const { postResolvers } = require('./post/postResolvers');
 
 const app = express();
+app.use(cors());
 
 const schemaString = (`
   type Query {
